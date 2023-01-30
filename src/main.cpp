@@ -2,9 +2,13 @@
 
 #include "DigitalBus.h"
 #include "MemDump.h"
+#include "IoTester.h"
 
 DigitalBus bus;
 MemDump memDump(bus);
+IoTester ioTester(bus);
+
+
 
 void setupPinout()
 {
