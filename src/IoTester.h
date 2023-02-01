@@ -8,6 +8,7 @@
 class DigitalBus;
 
 class IoTester {
+    bool initialized = false;
     DigitalBus &bus;
 public:
     explicit IoTester(DigitalBus &bus);

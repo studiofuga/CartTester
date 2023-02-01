@@ -14,12 +14,16 @@ IoTester::IoTester(DigitalBus &bus) : bus(bus)
 
 void IoTester::setup()
 {
+    initialized = true;
     Serial.println("Data: 7 6 5 4 3 2 1 0");
     bus.address(0x0000);
 }
 
 bool IoTester::doStep()
 {
+    if (!initialized) {
+        setup();
+    }
     uint8_t data = bus.data();
 
     Serial.print("Data: ");

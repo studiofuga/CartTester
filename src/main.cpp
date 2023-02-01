@@ -3,12 +3,12 @@
 #include "DigitalBus.h"
 #include "MemDump.h"
 #include "IoTester.h"
+#include "PatternRead.h"
 
 DigitalBus bus;
 MemDump memDump(bus);
 IoTester ioTester(bus);
-
-
+PatternRead patternRead(bus);
 
 void setupPinout()
 {
