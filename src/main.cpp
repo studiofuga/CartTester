@@ -4,11 +4,16 @@
 #include "MemDump.h"
 #include "IoTester.h"
 #include "PatternRead.h"
+#include "SwitcherF8.h"
 
 DigitalBus bus;
-MemDump memDump(bus);
+SwitcherF8 switcher(bus);
+MemDump memDump(bus, switcher);
 IoTester ioTester(bus);
 PatternRead patternRead(bus);
+
+static const uint16_t ROM_SIZE = 8*1024;
+static const uint16_t ROM_BASE = 0x1000;
 
 void setupPinout()
 {
@@ -24,11 +29,18 @@ void setupPinout()
     delay(1000);
 }
 
+void setupRom()
+{
+    memDump.setRomSize(ROM_SIZE);
+    memDump.setRomBase(ROM_BASE);
+}
+
 void setup() {
     Serial.begin(115200);
     Serial.println("\n\nAtari Cart Tester v1");
 
     setupPinout();
+    setupRom();
 }
 
 void loop() {

@@ -2,13 +2,15 @@
 // Created by happycactus on 27/01/23.
 //
 
-#include "MemDump.h"
 #include "Arduino.h"
+
+#include "MemDump.h"
 #include "DigitalBus.h"
+#include "BankSwitcher.h"
 
 #define BYTES_PER_LINE 16
 
-MemDump::MemDump(DigitalBus &bus) : bus(bus)
+MemDump::MemDump(DigitalBus &bus, BankSwitcher &switcher) : bus(bus),  bankSwitcher(switcher)
 {
 
 }
@@ -20,7 +22,20 @@ bool MemDump::doStep()
 
     unsigned char bt[BYTES_PER_LINE];
     for (unsigned char & i : bt) {
-        bus.address(address);
+        bool enabled = (address >= romBase);
+        uint16_t currentbank = bankSwitcher.currentBank();
+        uint16_t bank = (address >> 12) - 1;
+
+        if (bank != currentbank) {
+            bankSwitcher.switchBank(bank);
+        }
+
+        uint16_t mask = 0;
+        if (enabled) {
+            mask = 1<<12;
+        }
+
+        bus.address((address & 0x0fff) | mask);
         i = bus.data();
         sprintf(fmtBuffer, "%02x ", i);
         Serial.print(fmtBuffer);
@@ -31,5 +46,5 @@ bool MemDump::doStep()
 
     Serial.println();
 
-    return (address < 8*1024);
+    return (address < romBase+romLimit);
 }
