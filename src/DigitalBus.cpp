@@ -6,7 +6,7 @@
 #include "Arduino.h"
 
 const uint8_t DigitalBus::AddressPin[13] = {
-    44, 42, 40, 38, 36, 34, 32, 30, 35, 37, 39, 41, 43
+    44, 42, 40, 38, 36, 34, 32, 30, 35, 37, 41, 39, 43
 };
 
 const uint8_t DigitalBus::DataPin[8] = {
